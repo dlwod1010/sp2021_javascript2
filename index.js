@@ -1,32 +1,30 @@
-const http = require("http");
-const fs = require("fs"); //fs-> file system module
-const path = require('path');
+import http from "http";
+import querystring from "querystring";
+import { getAll, getItem } from "./data.js";
+
+// import fs from "fs";
 
 http.createServer((req, res) => {
-    switch(req.url) {
+    const url = req.url.toLowerCase();
+    const path = url.split("?")[0];
+    const query = url.split("?")[1];
+
+    switch(path) {
         case '/':
-            fs.readFile("index.html", function(err, data) {
-                if (err) {
-                    return console.error(err);
-                }
-                res.writeHead(200, {'Content-Type': 'text/html'});
-                res.end(data.toString());
-            });
-            break;
-        case '/about':
-            fs.readFile("about.html", function(err, data) {
-                if (err) {
-                    return console.error(err);
-                }
-                res.writeHead(200, {'Content-Type': 'text/html'});
-                res.end(data.toString());
-            });
-            break;
-        case (req.url.match(/\.css$/) || {}).input:
-            var cssPath = path.join(__dirname, 'public', req.url);
-            var fileStream = fs.createReadStream(cssPath, "UTF-8");
-            res.writeHead(200, {"Content-Type": "text/css"});
-            fileStream.pipe(res);
+            res.writeHead(200, {'Content-Type': 'text/plain'});
+            res.end(JSON.stringify(getAll()));
+            break;    
+        
+        case '/about':        
+            res.writeHead(200, {'Content-Type': 'text/plain'});
+            res.end('About me: Hi, my name is Jiae, I\'m currently attending a Web development program in Seattle Central College.');        
+            break; 
+
+        case '/detail':        
+            let queryObject = querystring.parse(query);
+            const item = getItem(queryObject.name);
+            res.writeHead(200, {'Content-Type': 'text/plain'});
+            res.end(JSON.stringify(item));   
             break;
         default:
             res.writeHead(404, {'Content-Type': 'text/plain'});
