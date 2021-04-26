@@ -1,19 +1,25 @@
-<nav><a href="/">Home</a></nav>
-{{#if item}}
-<h2>{{item.name}} detail</h2>
-<ul>
-    <li>Manufacturer: {{item.manufacturer}}</li>
-    <li>Price: ${{item.price}}</li>
-    <li>Feature(s):
-        <ul>
-            {{#each item.feature}}
-            <li>
-                {{this}}
-            </li>
-            {{/each}}
-        </ul>
-    </li>
-</ul>
-{{else}}
-<p>{{searchingItem}} not found</p>
-{{/if}}
+<head>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <nav><a href="/">Home</a></nav>
+    {{#if item}}
+    <h2>{{item.name}} detail</h2>
+    <ul>
+        <li>Manufacturer: {{item.manufacturer}}</li>
+        <li>Price:<span class="price"> ${{item.price}}</span></li>
+        <li>Feature(s):
+            <ul>
+                {{#each item.feature}}
+                <li>
+                    {{this}}
+                </li>
+                {{/each}}
+            </ul>
+        </li>
+    </ul>
+    {{else}}
+    <p>{{searchingItem}} not found</p>
+    {{/if}}
+</body>

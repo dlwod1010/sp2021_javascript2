@@ -1,8 +1,14 @@
-<h1>Coffee Machine List</h1>
-<ul>
-    {{#each data}}
-    <li>
-        <a href="/detail?name={{name}}">{{name}}</a>
-    </li>
-    {{/each}}
-</ul>
+<head>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <h1>Coffee Machine List</h1>
+    <ul class="coffee-machine-list">
+        {{#each data}}
+        <li>
+            <a href="/detail?name={{name}}">{{name}}</a>
+        </li>
+        {{/each}}
+    </ul>
+</body>
