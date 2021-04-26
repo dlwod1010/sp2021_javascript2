@@ -1,6 +1,3 @@
-// import querystring from "querystring";
-// import { getAll, getItem } from "./data.js";
-
 'use strict'
 const express = require("express");
 // const bodyParser = require("body-parser")
@@ -23,15 +20,13 @@ app.get('/', (req, res) => {
 
 app.get('/detail', (req, res) => {
     let machineItem = getItem(req.query.name);
-    res.render('detail', { item: machineItem });
-})
+    res.render('detail', { item: machineItem, searchingItem: req.query.name});
+});
 
 app.get('/about', (req, res) => {
     res.type('text/plain');
     res.send('About page');
 });
-
-
 
 // define 404 handler
 app.use((req,res) => {
@@ -43,9 +38,6 @@ app.use((req,res) => {
 app.listen(app.get('port'), () => {
     console.log('Express started'); 
 });
-
-
-
 
 // http.createServer((req, res) => {
 //     const url = req.url.toLowerCase();

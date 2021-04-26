@@ -1,12 +1,12 @@
 const coffeeMachines = [
     { 
-        name: "the Barista Express", 
+        name: "Barista Express", 
         manufacturer :"Breville", 
         price : 700, 
         feature : ["semi-automatic", "built-in-grinder", "milk foam"]      
     }, 
     { 
-        name: "the Barista Touch", 
+        name: "Barista Touch", 
         manufacturer :"Breville", 
         price : 995.95, 
         feature : ["semi-automatic", "touch screen", "built-in-grinder", "milk foam"]      
