@@ -10,17 +10,29 @@ app.set('port', process.env.PORT || 3000);
 app.use(express.static(__dirname + '/public')); // set location for static files
 // app.use(bodyParser.urlencoded({extended: true})); // parse form submissions
 
-// send static file as response
+let exphbs = require("express-handlebars");
+app.engine('handlebars', exphbs({defaultLayout: false}));
+app.set("view engine", "handlebars");
+
+const { getAll, getItem } = require("./data.js");
+
 app.get('/', (req, res) => {
-    res.type('text/html');
-    res.sendFile(__dirname + '/public/home.html'); 
+    let coffeeMachineList = getAll();
+    res.render('home', { data: coffeeMachineList });
 });
 
-// send plain text response
+app.get('/detail', (req, res) => {
+    let machineItem = getItem(req.query.name);
+    res.render('detail', { item: machineItem });
+})
+
 app.get('/about', (req, res) => {
     res.type('text/plain');
     res.send('About page');
 });
+
+
+
 // define 404 handler
 app.use((req,res) => {
     res.type('text/plain'); 
