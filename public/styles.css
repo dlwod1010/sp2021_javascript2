@@ -1,7 +1,12 @@
 body {
-  background-color: #ff814c;
+  background-color: #dddddd;
 }
 
-p {
-  font-size: 20px;
+.coffee-machine-list a {
+  text-decoration: none;
+}
+
+.price {
+  font-size: 1.2em;
+  font-weight: bold;
 }
