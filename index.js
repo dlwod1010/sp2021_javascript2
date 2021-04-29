@@ -1,17 +1,15 @@
 'use strict'
-const express = require("express");
-// const bodyParser = require("body-parser")
+import express from 'express';
+import exphbs from "express-handlebars"
+import { getAll, getItem } from "./data.js";
+
 const app = express();
 
 app.set('port', process.env.PORT || 3000);
-app.use(express.static(__dirname + '/public')); // set location for static files
-// app.use(bodyParser.urlencoded({extended: true})); // parse form submissions
-
-let exphbs = require("express-handlebars");
-app.engine('handlebars', exphbs({defaultLayout: false}));
+app.use(express.static('./public')); // set location for static files
+app.engine("handlebars", exphbs({defaultLayout: false}));
 app.set("view engine", "handlebars");
-
-const { getAll, getItem } = require("./data.js");
+// /app.use(express.urlencoded()); //Parse URL-encoded bodies
 
 app.get('/', (req, res) => {
     let coffeeMachineList = getAll();
@@ -25,11 +23,11 @@ app.get('/detail', (req, res) => {
 
 app.get('/about', (req, res) => {
     res.type('text/plain');
-    res.send('About page');
+    res.send('About me: Hi, my name is Jiae, I\'m currently attending a Web development program in Seattle Central College.');
 });
 
 // define 404 handler
-app.use((req,res) => {
+app.use((req,res) => { 
     res.type('text/plain'); 
     res.status(404);
     res.send('404 - Not found');
@@ -39,6 +37,7 @@ app.listen(app.get('port'), () => {
     console.log('Express started'); 
 });
 
+//commonJS
 // http.createServer((req, res) => {
 //     const url = req.url.toLowerCase();
 //     const path = url.split("?")[0];

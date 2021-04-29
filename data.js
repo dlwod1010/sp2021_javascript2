@@ -31,22 +31,21 @@ const coffeeMachines = [
     }
 ];
 
-module.exports = {
-    getAll: function () {
-        return coffeeMachines;
-    },
-    getItem: (name) => {
-        return coffeeMachines.find(machine => machine.name.toLowerCase() === name?.toLowerCase());
-    }
+export function getAll() {
+    return coffeeMachines;
+}
+
+export function getItem(name) {
+    return coffeeMachines.find(machine => machine.name.toLowerCase() === name?.toLowerCase());
 };
 
-//module style export!
-// export function getAll() {
-//     return coffeeMachines;
-// }
-
-// export function getItem(name) {
-//     return coffeeMachines.find(machine => machine.name.toLowerCase() === name?.toLowerCase());
+// module.exports = {
+//     getAll: function () {
+//         return coffeeMachines;
+//     },
+//     getItem: (name) => {
+//         return coffeeMachines.find(machine => machine.name.toLowerCase() === name?.toLowerCase());
+//     }
 // };
 
 //when the name(item) is empty(undefined), get an error in the method. So add '?' to name.toLowerCase().
