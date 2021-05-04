@@ -16,15 +16,19 @@ app.get('/', (req, res) => {
     res.render('home', { data: coffeeMachineList });
 });
 
-app.get('/detail', (req, res) => {
-    let machineItem = getItem(req.query.name);
-    res.render('detail', { item: machineItem, searchingItem: req.query.name});
+app.get('/detail', (req, res, next) => {
+    if (req.query.name) { 
+        let machineItem = getItem(req.query.name);
+        res.render('detail', { item: machineItem, searchingItem: req.query.name});
+    } else {       
+        next();
+    }
 });
 
 app.get('/about', (req, res) => {
     res.type('text/plain');
     res.send('About me: Hi, my name is Jiae, I\'m currently attending a Web development program in Seattle Central College.');
-});
+}); 
 
 // define 404 handler
 app.use((req,res) => { 

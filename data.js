@@ -1,4 +1,4 @@
-const coffeeMachines = [
+let coffeeMachines = [
     { 
         name: "Barista Express", 
         manufacturer :"Breville", 
@@ -37,7 +37,34 @@ export function getAll() {
 
 export function getItem(name) {
     return coffeeMachines.find(machine => machine.name.toLowerCase() === name?.toLowerCase());
-};
+}
+
+function isNewItem(item) {
+    return item?.name && !getItem(item?.name);
+}
+
+export function addItem(newItem) {
+    if (isNewItem(newItem)) { 
+        coffeeMachines.push(newItem);
+        return true;
+    } else {
+        return false;
+    }
+}
+
+export function deleteItem(unwantedItemName) {
+    if (getItem(unwantedItemName)) {
+        coffeeMachines = coffeeMachines.filter(machine => machine.name.toLocaleLowerCase() !== unwantedItemName?.toLowerCase());
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+
+
+
 
 // module.exports = {
 //     getAll: function () {
