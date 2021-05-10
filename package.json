@@ -4,7 +4,7 @@
   "description": "create demo app",
   "main": "index.js",
   "type": "module",
-  "scripts": {   
+  "scripts": {
     "test": "npx mocha test/**"
   },
   "repository": {
@@ -20,7 +20,8 @@
   "dependencies": {
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "express-handlebars": "^5.3.0"
+    "express-handlebars": "^5.3.0",
+    "mongoose": "^5.12.7"
   },
   "devDependencies": {
     "chai": "^4.3.4",
