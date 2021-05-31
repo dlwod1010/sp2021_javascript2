@@ -7,18 +7,52 @@
     <title>Single page coffee machine app</title>
     <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <script>
-        const data = '<%- data %>';
-        console.log(JSON.parse(data));
+    <div id="root"></div>
+    <script type="text/babel">
+        const Title = () => <h1>Coffee Machine List</h1>;
+        
+        const CoffeeMachineItem = ({ item }) => {
+            const link = `/detail?name=${item.name}`;
+            return (
+                <a href={link}>{item.name}</a>
+            );
+        };
+
+        const CoffeeMachineTable = ({ data }) => {
+            return (
+                <>
+                    {data.length === 0 ?
+                        <div>No coffee machine</div> :
+                        <ul className="coffee-machine-list">
+                            {
+                                data.map((item) => 
+                                <li key={item.name}>
+                                    <CoffeeMachineItem item={item} />
+                                </li>)
+                            }
+                        </ul>
+                    }
+                </>
+            );
+        };
+
+        const App = ({ data }) => {
+            return (
+                <>
+                    <Title />
+                    <CoffeeMachineTable data={data} />
+                </>
+            );
+        };
+
+        const data = JSON.parse('<%- data %>');
+        ReactDOM.render(<App data={data} />, document.getElementById('root') );
     </script>
 </body>
 </html>
-
-
-
-
-
-test
-

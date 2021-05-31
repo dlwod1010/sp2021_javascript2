@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
 
 app.get('/detail', (req, res, next) => {
     Machine.findOne({ name: req.query.name }).lean().then((machineItem) => {
-        res.render('detail', { item: machineItem, searchingItem: req.query.name})
+        res.render('detail.html', { item: machineItem, searchingItem: req.query.name})
     })
     .catch(err => next(err));
 });
