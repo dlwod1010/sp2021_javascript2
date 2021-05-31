@@ -17,23 +17,23 @@
     <script type="text/babel">
         const Title = () => <h1>Coffee Machine List</h1>;
         
-        const CoffeeMachineItem = ({ item }) => {
-            const link = `/detail?name=${item.name}`;
+        const CoffeeMachineItem = ({ coffeeMachine }) => {
+            const link = `/detail?name=${coffeeMachine.name}`;
             return (
-                <a href={link}>{item.name}</a>
+                <a href={link}>{coffeeMachine.name}</a>
             );
         };
 
-        const CoffeeMachineTable = ({ data }) => {
+        const CoffeeMachineTable = ({ coffeeMachineList }) => {
             return (
                 <>
                     {data.length === 0 ?
                         <div>No coffee machine</div> :
                         <ul className="coffee-machine-list">
                             {
-                                data.map((item) => 
+                                coffeeMachineList.map((item) => 
                                 <li key={item.name}>
-                                    <CoffeeMachineItem item={item} />
+                                    <CoffeeMachineItem coffeeMachine={item} />
                                 </li>)
                             }
                         </ul>
@@ -46,7 +46,7 @@
             return (
                 <>
                     <Title />
-                    <CoffeeMachineTable data={data} />
+                    <CoffeeMachineTable coffeeMachineList={data} />
                 </>
             );
         };
