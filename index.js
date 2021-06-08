@@ -1,15 +1,15 @@
 'use strict'
 import express from 'express';
-// import exphbs from "express-handlebars"
-import ejs from 'ejs';
+import exphbs from "express-handlebars"
+// import ejs from 'ejs';
 import { Machine } from "./models/machine.js";
 import cors from 'cors';
 
 const app = express();
 
-//app.engine("handlebars", exphbs({defaultLayout: false}));
-app.engine('html', ejs.renderFile);
-app.set('view engine', 'html');
+app.engine("handlebars", exphbs({defaultLayout: false}));
+// app.engine('html', ejs.renderFile);
+app.set('view engine', 'handlebars');
 app.set('port', process.env.PORT || 3000);
 app.use(express.static('./public')); // set location for static files
 app.use('/api', cors());
@@ -17,13 +17,13 @@ app.use(express.json());//Use to parse JSON bodies
 
 app.get('/', (req, res) => {
     Machine.find({}).lean().then((coffeeMachineList) => {
-        res.render('home.html', { data: JSON.stringify(coffeeMachineList) })
+        res.render('home', { data: JSON.stringify(coffeeMachineList) })
     });    
 });
 
 app.get('/detail', (req, res, next) => {
     Machine.findOne({ name: req.query.name }).lean().then((machineItem) => {
-        res.render('detail.html', { item: machineItem, searchingItem: req.query.name})
+        res.render('detail', { item: machineItem, searchingItem: req.query.name})
     })
     .catch(err => next(err));
 });
