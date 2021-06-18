@@ -14,8 +14,8 @@
 </head>
 <body>
     <div id="root"></div>
-    <script type="text/babel"> 
-              
+    <script type="text/babel">
+
         const CoffeeMachines = (props) => {
             const machineList = props.data.map((machine) => {
                 return (
@@ -33,28 +33,19 @@
         }
 
         const CoffeeMachineDetail = (props) => {
-            const features = props.machine.feature.map((feature) => {
-                return (
-                    <li key={feature}>
-                        {feature}
-                    </li>
-                );
-            });
             return (
                 <div>
-                    <h3>Machine Details</h3>
-                        <span onClick={props.onHomeClick}>Home</span>
-                        <ul>
-                            <li>name: {props.machine.name}</li>
-                            <li>manufacturer: {props.machine.manufacturer}</li>
-                            <li>price: ${props.machine.price}</li>
-                            <li>feature(s): 
-                                <ul>
-                                    {features}                               
-                                </ul>
-                            </li>
-                        </ul>
-                </div>
+                    <h2>Machine Details</h2>
+                        <form>
+                            Name: <input type="text" name="name" value={props.machine.name || ""} onChange={props.handleChange} /><br/>
+                            Manufacturer: <input type="text" name="manufacturer" value={props.machine.manufacturer || ""} onChange={props.handleChange} /><br/>
+                            Price: $ <input type="text" name="price" value={props.machine.price || ""} onChange={props.handleChange} /><br/>
+                            Feature(s): <input type="text" name="features"  /><br/>
+                        </form>
+                        <button name="clear" onClick={props.clearForm}>Clear</button>&nbsp;
+                        <button name="save" onClick={props.saveItem}>Save</button>&nbsp;
+                        <button name="delete" onClick={props.deleteItem}>Delete</button>
+                </div> 
             );
         }
 
@@ -63,61 +54,73 @@
                 super(props);
                 this.state = { 
                     machines: {{{data}}},
-                    currentMachine: undefined
+                    currentMachine: {}
                 };
                 this.selectedMachine = this.selectedMachine.bind(this);
-                this.deselectMachine = this.deselectMachine.bind(this);
+                this.handleChange = this.handleChange.bind(this);
+                this.clearForm = this.clearForm.bind(this);
+                this.saveItem = this.saveItem.bind(this);
+                this.deleteItem = this.deleteItem.bind(this);
             }
             
             selectedMachine = (event) => {
-                //console.log(event);
                 const found = this.state.machines.find((machine) => {
-                    return machine.name === event.target.innerHTML;
+                    return machine.name === event.target.innerText;
                 });
                 this.setState({currentMachine: found});
             }
 
-            deselectMachine = (event) => {
-                this.setState({currentMachine: undefined});
+            handleChange = (event) => {
+                const newMachine = this.state.currentMachine;
+                newMachine[event.target.name] = event.target.value;
+                this.setState({currentMachine: newMachine});                              
+            }
+
+            clearForm = () => {
+                this.setState({currentMachine: {}});
+            }
+
+            saveItem = () => {
+                console.log(this.state.currentMachine);
+                if (this.state.currentMachine == {}) 
+                    return 
+                        fetch("/api/machinelist/additem", {
+                            method: "POST",
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify(this.state.currentMachine)
+                        })                    
+                            .then(res => res.json())
+                            .then((json) => { console.log(json) });
+            }
+
+            deleteItem = () => {
+                  if (this.state.currentMachine == {}) return
+                  let deleteId = this.state.currentMachine._id;
+                  let url = "/api/machinelist/delete"+deleteItem;
+
+                fetch(url)
+                    .then(res => res.json())
+                    .then((json) => { 
+                        console.log(json)});
             }
 
             render() {
                 return (
                     <div>
-                        {!this.state.currentMachine && 
-                            <CoffeeMachines data={this.state.machines} clickHandler={this.selectedMachine} />
-                        }
-                        {this.state.currentMachine && 
-                            <CoffeeMachineDetail 
-                                machine={this.state.currentMachine} 
-                                onHomeClick={this.deselectMachine}
-                            />
-                        }
-                    </div>
+                        <CoffeeMachines data={this.state.machines} clickHandler={this.selectedMachine} />
+                        <CoffeeMachineDetail 
+                        machine={this.state.currentMachine} 
+                        handleChange={this.handleChange}
+                        clearForm={this.clearForm}
+                        saveItem={this.saveItem}
+                        deleteItem={this.deleteItem}
+                        />
+                    </div> 
                 );
             }
         }
         ReactDOM.render(<CoffeeMachineApp />, document.getElementById('root'));   
-
-
     </script>
 </body>
 </html>
 
-
-{{!-- 
-//handlebars format
-<head>
-    <link rel="stylesheet" href="styles.css">
-</head>
-
-<body>
-    <h1>Coffee Machine List</h1>
-    <ul class="coffee-machine-list">
-        {{#each data}}
-        <li>
-            <a href="/detail?name={{name}}">{{name}}</a>
-        </li>
-        {{/each}}
-    </ul>
-</body> --}}

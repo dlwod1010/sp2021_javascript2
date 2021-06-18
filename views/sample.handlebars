@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Single page coffee machine app</title>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="stylesheet"   href="styles.css">
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel"> 
+              
+        const CoffeeMachines = (props) => {
+            const machineList = props.data.map((machine) => {
+                return (
+                    <li key={machine.name} onClick={props.clickHandler}>
+                        {machine.name}
+                    </li>
+                );
+            });            
+            return (
+                <>
+                    <h2>Coffee Machine List</h2>
+                    <ul>{machineList}</ul>
+                </>
+            );
+        }
+
+        const CoffeeMachineDetail = (props) => {
+            {{!-- const features = props.machine.feature.map((feature) => {
+                return (
+                    <li key={feature}>
+                        {feature}
+                    </li>
+                );
+            }); --}}
+            return (
+                <div>
+                    <h3>Machine Details</h3>
+                        <span onClick={props.onHomeClick}>Home</span>
+                        <form>
+                            Name: <input type="text" name="title" value={props.machine.name} onChange={this.handleChange} /><br/>
+                            Manufacturer: <input type="text" name="manufacturer" value={props.machine.manufacturer} onChange={this.handleChange}/><br/>
+                            Price: $ <input type="text" name="price" value={props.machine.price} onChange={this.handleChange}/><br/>
+                            Feature(s): <input type="text" name="features"  /><br/>
+                        </form>
+                        
+                        {{!-- <ul>
+                            <li>name: {props.machine.name}</li>
+                            <li>manufacturer: {props.machine.manufacturer}</li>
+                            <li>price: ${props.machine.price}</li>
+                            <li>feature(s): 
+                                <ul>
+                                    {features}                               
+                                </ul>
+                            </li>
+                        </ul> --}}
+                </div>
+            );
+        }
+
+        class CoffeeMachineApp extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = { 
+                    machines: {{{data}}},
+                    currentMachine: {}
+                };
+                this.selectedMachine = this.selectedMachine.bind(this);
+                {{!-- this.deselectMachine = this.deselectMachine.bind(this); --}}
+            }
+            
+            selectedMachine = (event) => {
+                const found = this.state.machines.find((machine) => {
+                    return machine.name === event.target.innerHTML;
+                });
+                this.setState({currentMachine: found});
+            }
+
+            {{!-- deselectMachine = (event) => {
+                this.setState({currentMachine: undefined});
+            } --}}
+
+            render() {
+                return (
+                    <div>
+                        <CoffeeMachines data={this.state.machines} clickHandler={this.selectedMachine} />
+                        <CoffeeMachineDetail machine={this.state.currentMachine} />
+                    </div>
+                );
+            }
+        }
+        ReactDOM.render(<CoffeeMachineApp />, document.getElementById('root'));   
+    </script>
+</body>
+</html>
+
+
+{{!-- 
+//handlebars format
+<head>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <h1>Coffee Machine List</h1>
+    <ul class="coffee-machine-list">
+        {{#each data}}
+        <li>
+            <a href="/detail?name={{name}}">{{name}}</a>
+        </li>
+        {{/each}}
+    </ul>
+</body> --}}

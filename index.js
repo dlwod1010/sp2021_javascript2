@@ -55,6 +55,7 @@ app.post('/api/machinelist/additem', (req, res, next) => {
     .catch(err => next(err));
 });
 
+
 app.delete('/api/machinelist/:name', (req, res, next) => {
     Machine.deleteOne({ name: req.params.name }).then((deletedItem) => {
         res.json({
