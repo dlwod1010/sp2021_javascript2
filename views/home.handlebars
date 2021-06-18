@@ -32,7 +32,11 @@
             );
         }
 
-        const CoffeeMachineDetail = (props) => {
+        const CoffeeMachineDetail = (props) => { 
+            let stringifiedFeature = '';
+            if (props.machine?.feature) {
+                stringifiedFeature = props.machine.feature.toString();
+            }
             return (
                 <div>
                     <h2>Machine Details</h2>
@@ -40,7 +44,7 @@
                             Name: <input type="text" name="name" value={props.machine.name || ""} onChange={props.handleChange} /><br/>
                             Manufacturer: <input type="text" name="manufacturer" value={props.machine.manufacturer || ""} onChange={props.handleChange} /><br/>
                             Price: $ <input type="text" name="price" value={props.machine.price || ""} onChange={props.handleChange} /><br/>
-                            Feature(s): <input type="text" name="features"  /><br/>
+                            Feature(s): <input type="text" name="feature" value={stringifiedFeature} onChange={props.handleChange} /><br/>
                         </form>
                         <button name="clear" onClick={props.clearForm}>Clear</button>&nbsp;
                         <button name="save" onClick={props.saveItem}>Save</button>&nbsp;
@@ -72,7 +76,12 @@
 
             handleChange = (event) => {
                 const newMachine = this.state.currentMachine;
-                newMachine[event.target.name] = event.target.value;
+                const propertyName = event.target.name;
+                if (propertyName === 'feature') {
+                    newMachine[propertyName] = event.target.value.split(',');
+                } else {
+                    newMachine[propertyName] = event.target.value;
+                }
                 this.setState({currentMachine: newMachine});                              
             }
 
@@ -109,11 +118,11 @@
                     <div>
                         <CoffeeMachines data={this.state.machines} clickHandler={this.selectedMachine} />
                         <CoffeeMachineDetail 
-                        machine={this.state.currentMachine} 
-                        handleChange={this.handleChange}
-                        clearForm={this.clearForm}
-                        saveItem={this.saveItem}
-                        deleteItem={this.deleteItem}
+                            machine={this.state.currentMachine} 
+                            handleChange={this.handleChange}
+                            clearForm={this.clearForm}
+                            saveItem={this.saveItem}
+                            deleteItem={this.deleteItem}
                         />
                     </div> 
                 );
