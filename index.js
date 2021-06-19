@@ -55,9 +55,21 @@ app.post('/api/machinelist/additem', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.put('/api/machinelist/:id', async (req, res, next) => {
+    const myQuery = {_id: req.params.id};
+    const newValues = {
+        name: req.body.name,
+        manufacturer: req.body.manufacturer,
+        price: req.body.price,
+        feature: req.body.feature
+    };
+    const result = await Machine.updateOne(myQuery, newValues);
+    res.json({ updated: result.nModified, _id: req.body._id });
+});
 
-app.delete('/api/machinelist/:name', (req, res, next) => {
-    Machine.deleteOne({ name: req.params.name }).then((deletedItem) => {
+app.delete('/api/machinelist/:id', (req, res, next) => {
+    console.log('delete');
+    Machine.deleteOne({ _id: req.params.id }).then((deletedItem) => {
         res.json({
             ok: deletedItem.ok === 1,
             deletedCount: deletedItem.deletedCount

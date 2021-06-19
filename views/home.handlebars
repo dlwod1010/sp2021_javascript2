@@ -19,7 +19,7 @@
         const CoffeeMachines = (props) => {
             const machineList = props.data.map((machine) => {
                 return (
-                    <li key={machine.name} onClick={props.clickHandler}>
+                    <li key={machine._id} onClick={props.clickHandler}>
                         {machine.name}
                     </li>
                 );
@@ -61,6 +61,8 @@
                     currentMachine: {}
                 };
                 this.selectedMachine = this.selectedMachine.bind(this);
+                this.addMachine = this.addMachine.bind(this);
+                this.removeMachine = this.removeMachine.bind(this);
                 this.handleChange = this.handleChange.bind(this);
                 this.clearForm = this.clearForm.bind(this);
                 this.saveItem = this.saveItem.bind(this);
@@ -72,6 +74,16 @@
                     return machine.name === event.target.innerText;
                 });
                 this.setState({currentMachine: found});
+            }
+
+            addMachine = (newItem) => {
+                const newMachines = [...this.state.machines, newItem];
+                this.setState({ machines: newMachines });
+            }
+
+            removeMachine = (deletedItem) => {
+                const newMachines = this.state.machines.filter(item => item._id !== deletedItem._id);
+                this.setState({ machines: newMachines });
             }
 
             handleChange = (event) => {
@@ -89,28 +101,42 @@
                 this.setState({currentMachine: {}});
             }
 
-            saveItem = () => {
-                console.log(this.state.currentMachine);
-                if (this.state.currentMachine == {}) 
-                    return 
-                        fetch("/api/machinelist/additem", {
-                            method: "POST",
-                            headers: {'Content-Type': 'application/json'},
-                            body: JSON.stringify(this.state.currentMachine)
-                        })                    
-                            .then(res => res.json())
-                            .then((json) => { console.log(json) });
+            // api/machines/create [POST]
+            // api/machines/{machine-id}/ [PUT]
+
+            saveItem = async () => {                
+                if (this.state.currentMachine._id) {
+                    return fetch(`/api/machinelist/${this.state.currentMachine._id}`, {
+                                method: "PUT",
+                                headers: {'Content-Type': 'application/json'},
+                                body: JSON.stringify(this.state.currentMachine)
+                            }); 
+                   
+                } else {
+                    const response = await fetch(`/api/machinelist/addItem`, {
+                                method: "POST",
+                                headers: {'Content-Type': 'application/json'},
+                                body: JSON.stringify(this.state.currentMachine)
+                            });
+                    const createdItem = await response.json();
+                    console.log(createdItem);
+                    this.addMachine(createdItem);
+                }
             }
 
+    
             deleteItem = () => {
-                  if (this.state.currentMachine == {}) return
-                  let deleteId = this.state.currentMachine._id;
-                  let url = "/api/machinelist/delete"+deleteItem;
-
-                fetch(url)
+                if (this.state.currentMachine._id) {
+                    fetch(`/api/machinelist/${this.state.currentMachine._id}`, {
+                        method: "DELETE"
+                    })
                     .then(res => res.json())
                     .then((json) => { 
-                        console.log(json)});
+                        if (json.ok) {
+                            this.removeMachine(this.state.currentMachine);
+                        }
+                    });
+                }
             }
 
             render() {
